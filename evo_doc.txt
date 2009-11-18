@@ -1,9 +1,34 @@
+-------------------------
+
+evo_Config
+
+-------------------------
+
+The main setup datatype for configuring the behaviour of the evolutionary algorithm.
+It is an opaque pointer to prevent unnecessary exposure of implementation details.
+
+-----------------------------
+evo_Config* evo_Config_New();
+-----------------------------
+
+Makes a new configuration instance, for use by various setup calls.
+
+-----------------------------
+void evo_Config_Free(evo_Config* config);
+-----------------------------
+
+Frees the memory associated with the configuration object.
+
+
 
 -------------------------
 
 evo_Config Required Setup
 
 -------------------------
+
+All setup functions must be called before an evo_Config_Execute call.
+Configurations must not be reused.
 
 -------------------------------------------------------------------------
 void evo_Config_SetThreadCount(evo_Config* config, evo_uint threadCount);
@@ -127,11 +152,16 @@ If this returns false (zero), the evolutionary algorithm should continue and is 
 Note that the algorithm will always terminate at the configured maxIterations.
 However, when that occurs, the algorithm marks that particular iteration as a failure.
 
+
+
 -------------------------
 
 evo_Config Optional Setup
 
 -------------------------
+
+All setup functions must be called before an evo_Config_Execute call.
+Configurations must not be reused.
 
 ---------------------------------------------------------------------------------
 void evo_Config_AddContextStartCallback(evo_Config* config, evo_UserCallback cb);
@@ -155,11 +185,16 @@ Takes a callback with the following signature:
 This callback is invoked after a particular thread finishes its computations.
 This is useful for custom data allocation used by things such as the selection operator.
 
+
+
 -------------------------
 
 evo_Config Execution
 
 -------------------------
+
+All setup functions must be called before an evo_Config_Execute call.
+Configurations must not be reused.
 
 --------------------------------------------
 void evo_Config_Execute(evo_Config* config);
@@ -189,16 +224,20 @@ or this will fail.
 On failure, the program will exit with an error message.
 
 
--------------------------
-
-evo_Context Methods:
 
 -------------------------
+
+evo_Context
+
+-------------------------
+
+An evo_Context is a block of data that is unique to each thread running the evolutionary algorithm.
+
+The context contains useful information about its current progress in computation, its
+local statistics, its local population, fitness, and userdata required by the various evolutionary operators.
 
 NOTE: Some attributes are left undocumented here, because they are implementation details.
 They might be useful to certain applications though.
-
-
 
 -----------------------
 evo_uint threadID;
@@ -252,6 +291,8 @@ between the fitness operator and the selection operator.
 void* selectionUserData;
 -----------------------
 Custom data that can be used by the selection operator.
+
+
 
 -------------------------
 
