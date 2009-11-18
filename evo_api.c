@@ -150,7 +150,30 @@ static void _evo_Config_PopulateStats(evo_Config* config, evo_Context** contexts
     config->stats = overall;
 }
 
-/* Execution. Here be dragons. */
+/*
+    Starts evolutionary algorithm execution across multiple threads.
+    
+    Requires the following to be set:
+    * thread count
+    * trials per thread
+    * population size
+    * max iterations
+    
+    * population initializer
+    * population finializer
+    
+    * fitness operator
+    * selection operator
+    * crossover operator
+    * mutation operator
+    * success predicate
+    
+    All required configuration details must be filled, or this will fail.
+    The configuration must not already be running, and must not have been used previously,
+    or this will fail.
+    
+    On failure, the program will exit with an error message.
+*/
 void evo_Config_Execute(evo_Config* config)
 {
     int a;
@@ -316,7 +339,7 @@ static void* _evo_RunThread(void* arg)
             }
             
             /* Algorithm was successful, stop early. */
-            if(config->successPredicate(config))
+            if(config->successPredicate(context))
             {
                 success = 1;
                 break;

@@ -53,7 +53,7 @@ typedef evo_bool (*evo_PopulationInitializer)(evo_Context* context, evo_uint pop
     Called when a thread has finished all of its trials.
     
     
-    This function is expect to frees the memory associated with every gene in the context.
+    This function is expected to free the memory associated with every gene in the context.
     
 */
 typedef void (*evo_PopulationFinalizer)(evo_Context* context, evo_uint populationSize);
@@ -80,7 +80,8 @@ typedef void (*evo_SelectionOperator)(evo_Context* context, evo_uint populationS
     The crossover operator should perform some kind of copy or combination of the parent genes,
     and overwrite the contents of the children.
  */
-typedef void (*evo_CrossoverOperator)(evo_Context* context, void* parentA, void* parentB, void* childA, void* childB);
+typedef void (*evo_CrossoverOperator)(evo_Context* context,
+    void* parentA, void* parentB, void* childA, void* childB);
 /*
     The mutation operator.
     
@@ -153,31 +154,7 @@ void evo_Config_SetSuccessPredicate(evo_Config* config, evo_SuccessPredicate ter
 /* Optional callbacks. */
 void evo_Config_AddContextStartCallback(evo_Config* config, evo_UserCallback cb);
 void evo_Config_AddContextEndCallback(evo_Config* config, evo_UserCallback cb);
-/*
-    Starts evolutionary algorithm execution across multiple threads.
-    
-    Requires the following to be set:
-    * thread count
-    * trials per thread
-    * population size
-    * max iterations
-    
-    * population initializer
-    * population finializer
-    
-    * fitness operator
-    * selection operator
-    * crossover operator
-    * mutation operator
-    * success predicate
-    
-    All required configuration details must be filled, or this will fail.
-    The configuration must not already be running, and must not have been used previously,
-    or this will fail.
-    
-    On failure, the program will exit with an error message.
-    
-*/
+/* Starts execution across multiple threads. */
 void evo_Config_Execute(evo_Config* config);
 
 /* A structure containing overall stats. Can be used to construct other statistics when the program finishes. */
@@ -263,13 +240,14 @@ struct evo_Context
 };
 
 /*
-    For ease-of-use for the selection operator.
+    For ease-of-use with the selection operator.
     AddBreedEvent takes valid indexes within the genes array to be chosen as parents/children.
 
     If it successfully added the parents/children, then it will return 1.
     However, if any of the genes was already chosen by a previous call, then it will return 0.
 */
-evo_bool evo_Context_AddBreedEvent(evo_Context* context, evo_uint parentA, evo_uint parentB, evo_uint childA, evo_uint childB);
+evo_bool evo_Context_AddBreedEvent(evo_Context* context,
+    evo_uint parentA, evo_uint parentB, evo_uint childA, evo_uint childB);
 
 
 
