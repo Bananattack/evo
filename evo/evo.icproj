@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="evo"
+	ProjectGUID="{A406018C-9115-4FA6-9722-ED4E865006F8}"
+	VCNestedProjectGUID="{ACAF026D-B8B7-4259-94CF-559BC58888D8}"
+	VCNestedProjectFileName="evo.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

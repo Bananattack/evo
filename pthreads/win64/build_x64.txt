@@ -1,0 +1,6 @@
+I used the following build parameters within VS 9 2008 express for most libs:
+
+- use static MFC
+- /machine:x64
+
+DG

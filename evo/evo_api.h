@@ -15,7 +15,7 @@ typedef unsigned int evo_uint;
 /* Here we declare the structures but do not define them. */
 typedef struct evo_Config evo_Config;
 typedef struct evo_Context evo_Context;
-typedef struct evo_Stats evo_stats;
+typedef struct evo_Stats evo_Stats;
 
 
 
@@ -118,6 +118,14 @@ evo_Config* evo_Config_New();
     The configuration must not be running when it is called, or these will fail.
 */
 void evo_Config_Free(evo_Config* config);
+/*
+    Returns whether a given configuration was used or not.
+*/
+evo_bool evo_Config_IsUsed(evo_Config* config);
+/*
+    Returns the stats associated with a run of the configuration.
+*/
+evo_Stats* evo_Config_GetStats(evo_Config* config);
 
 /* 
     The crucial settings for the evolutionary algorithm.
@@ -142,8 +150,8 @@ void evo_Config_SetPopulationSize(evo_Config* config, evo_uint populationSize);
     
     See descriptions alongside the typedefs (a while above) for each of these, for more details.
 */
-void evo_Config_SetPopulationInitializer(evo_Config config, evo_PopulationInitializer populationInitializer);
-void evo_Config_SetPopulationFinalizer(evo_Config config, evo_PopulationFinalizer populationFinalizer);
+void evo_Config_SetPopulationInitializer(evo_Config* config, evo_PopulationInitializer populationInitializer);
+void evo_Config_SetPopulationFinalizer(evo_Config* config, evo_PopulationFinalizer populationFinalizer);
 
 void evo_Config_SetFitnessOperator(evo_Config* config, evo_FitnessOperator fitnessOperator);
 void evo_Config_SetSelectionOperator(evo_Config* config, evo_SelectionOperator selectionOperator);
@@ -161,7 +169,7 @@ void evo_Config_Execute(evo_Config* config);
 struct evo_Stats
 {
     /* Total number of trials */
-    evo_uint trails;
+    evo_uint trials;
     /*
         The number of failed trials.
         Successes are mutually exclusive, so all trials that are not failures are successes
@@ -185,7 +193,7 @@ struct evo_Stats
 struct evo_Context
 {
     /* For internal use. */
-    evo_Config* configuration;
+    evo_Config* config;
     /*
         The thread id, which might be useful if for some reason global storage is required by
         part of the algorithm.

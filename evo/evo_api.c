@@ -1,4 +1,5 @@
 /* Standard library (needs math library to be linked). */
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 /* pthreads is used for multithreading. */
@@ -61,11 +62,7 @@ struct evo_Config
 
 evo_Config* evo_Config_New()
 {
-    evo_Config* config = calloc(1, sizeof(evo));
-    if(!config)
-    {
-        return;
-    }
+    evo_Config* config = calloc(1, sizeof(evo_Config));
     return config;
 }
 
@@ -77,11 +74,20 @@ void evo_Config_Free(evo_Config* config)
     }
 }
 
+evo_bool evo_Config_IsUsed(evo_Config* config)
+{
+    return config->used;
+}
+
+evo_Stats* evo_Config_GetStats(evo_Config* config)
+{
+    return (config->running) ? ((evo_Stats*) NULL) : &config->stats;
+}
+
 /* Attributes. */
 EVO_ATTR_SETTER(evo_Config_SetThreadCount, threadCount, evo_uint)
 EVO_ATTR_SETTER(evo_Config_SetTrialsPerThread, trialsPerThread, evo_uint)
 EVO_ATTR_SETTER(evo_Config_SetMaxIterations, maxIterations, evo_uint)
-EVO_ATTR_SETTER(evo_Config_SetPopulationSize, populationSize, evo_uint)
 EVO_ATTR_SETTER(evo_Config_SetPopulationSize, populationSize, evo_uint)
 
 /* Callbacks. */
@@ -117,17 +123,18 @@ void evo_Config_AddContextEndCallback(evo_Config* config, evo_UserCallback cb)
 /* Aggregates statistics after all trials are finished. */
 static void _evo_Config_PopulateStats(evo_Config* config, evo_Context** contexts)
 {
+	evo_uint i;
     evo_Stats* stats;
     evo_Stats* overall;
-    
+
     overall = &config->stats;
-    memset(&overall, 0, sizeof(evo_Stats));
-    
+    memset(overall, 0, sizeof(evo_Stats));
+
     for(i = 0; i < config->threadCount; i++)
     {
         stats = &contexts[i]->stats;
     
-        overall->trails += stats->trails;
+        overall->trials += stats->trials;
         overall->failures += stats->failures;
         overall->sumIterations += stats->sumIterations;
         overall->sumSquaredIterations += stats->sumSquaredIterations;
@@ -147,7 +154,6 @@ static void _evo_Config_PopulateStats(evo_Config* config, evo_Context** contexts
             overall->maxIteration = stats->maxIteration;
         }
     }
-    config->stats = overall;
 }
 
 /*
@@ -241,6 +247,8 @@ void evo_Config_Execute(evo_Config* config)
     
     /* Aggregate all statistics. */
     _evo_Config_PopulateStats(config, contexts);
+
+    printf("DING DING DING DING\n");
     
     /* Configuration is no longer running. Rejoice! */
     config->running = 0;
@@ -259,7 +267,7 @@ static void* _evo_RunThread(void* arg)
     evo_bool success;
     evo_Context* context;
     evo_Config* config;
-    evo_uint i;
+    evo_uint i, j;
     evo_uint threadID, trialsPerThread, maxIterations, populationSize;
     
     context = (evo_Context*) arg;
@@ -271,14 +279,13 @@ static void* _evo_RunThread(void* arg)
 
     /* Create the neccessary arrays */
     context->fitnesses = malloc(populationSize * sizeof(double));
-    context->parentPopIndexes = malloc(populationSize * sizeof(evo_uint));
-    context->childPopIndexes = malloc(populationSize * sizeof(evo_uint));
-    context->markedGenes = malloc(populationSize * size(evo_bool));
+    context->breedEvents = malloc(populationSize * sizeof(evo_uint));
+    context->markedGenes = malloc(populationSize * sizeof(evo_bool));
     
     /* Invoke all user start-of-run callbacks */
     for(i = 0; i < config->cbContextStartCount; i++)
     {
-        config->cbContextStart(context);
+        config->cbContextStart[i](context);
     }
 
     /* Keep going until every iteration has completed. */
@@ -314,27 +321,27 @@ static void* _evo_RunThread(void* arg)
             {
                 /* Perform crossover. */
                 config->crossoverOperator(context,
-                    context->gene[context->breedEvent[i]], context->gene[context->breedEvent[i + 1]], 
-                    context->gene[context->breedEvent[i + 2]], context->gene[context->breedEvent[i + 3]]);
+                    context->genes[context->breedEvents[i]], context->genes[context->breedEvents[i + 1]], 
+                    context->genes[context->breedEvents[i + 2]], context->genes[context->breedEvents[i + 3]]);
                     
                 /* Mutate the children. */
-                config->mutationOperator(context, context->gene[context->breedEvent[i + 2]]);
-                config->mutationOperator(context, context->gene[context->breedEvent[i + 3]]);
+                config->mutationOperator(context, context->genes[context->breedEvents[i + 2]]);
+                config->mutationOperator(context, context->genes[context->breedEvents[i + 3]]);
                 
                 /* Update the fitness of child A */
-                j = context->breedEvent[i + 2];
-                context->fitnesses[j] = config->fitnessOperator(context, context->gene[j]);
+                j = context->breedEvents[i + 2];
+                context->fitnesses[j] = config->fitnessOperator(context, context->genes[j]);
                 if(context->fitnesses[j] > context->bestFitness)
                 {
                     context->bestFitness = context->fitnesses[j];
                 }
                 
                 /* Update the fitness of child B */
-                j = context->breedEvent[i + 3];
-                context->fitnesses[j] = config->fitnessOperator(context, context->gene[j]);
+                j = context->breedEvents[i + 3];
+                context->fitnesses[j] = config->fitnessOperator(context, context->genes[j]);
                 if(context->fitnesses[j] > context->bestFitness)
                 {
-                    context->bestFitness = context->fitness[j];
+                    context->bestFitness = context->fitnesses[j];
                 }
             }
             
@@ -363,7 +370,7 @@ static void* _evo_RunThread(void* arg)
             context->stats.failures++;
         }
         /* Update context stats. */
-        if(trial == 0 || context->iteration < context->stats.minIteration)
+        if(context->trial == 0 || context->iteration < context->stats.minIteration)
         {
             context->stats.minIteration = context->iteration;
         }
@@ -382,7 +389,7 @@ static void* _evo_RunThread(void* arg)
     /* Invoke all user end-of-run callbacks */
     for(i = 0; i < config->cbContextEndCount; i++)
     {
-        config->cbContextEnd(context);
+        config->cbContextEnd[i](context);
     }
     
     /* Free the population */
@@ -412,5 +419,7 @@ evo_bool evo_Context_AddBreedEvent(evo_Context* context, evo_uint pa, evo_uint p
         context->markedGenes[pb] = 1;
         context->markedGenes[ca] = 1;
         context->markedGenes[cb] = 1;
+
+        return EVO_TRUE;
     }
 }
