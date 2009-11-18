@@ -98,6 +98,14 @@ typedef void (*evo_MutationOperator)(evo_Context* context, void* gene);
     However, when that occurs, the algorithm marks that particular iteration as a failure.
 */
 typedef evo_bool (*evo_SuccessPredicate)(evo_Context* context);
+/*
+    A callback into user code.
+    
+    This might be custom allocator/free routines for userdata within the program.
+    User callbacks should not rely on call order relative to other user callbacks.
+    This means that callbacks should probably agree on what memory can get manipulated by each, exclusively.
+*/
+typedef void (*evo_UserCallback)(evo_Context* context);
 
 
 
@@ -142,6 +150,9 @@ void evo_Config_SetCrossoverOperator(evo_Config* config, evo_CrossoverOperator c
 void evo_Config_SetMutationOperator(evo_Config* config, evo_MutationOperator mutationOperator);
 
 void evo_Config_SetSuccessPredicate(evo_Config* config, evo_SuccessPredicate terminationPredicate);
+/* Optional callbacks. */
+void evo_Config_AddContextStartCallback(evo_Config* config, evo_UserCallback cb);
+void evo_Config_AddContextEndCallback(evo_Config* config, evo_UserCallback cb);
 /*
     Starts evolutionary algorithm execution across multiple threads.
     
