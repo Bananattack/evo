@@ -10,7 +10,7 @@
 
 static void* _evo_RunThread(void* arg);
 
-/* The configuration structure. Intended to be an opaque data-type to the calling code. */
+/* The configuration structure. Intended to be an opaque data-type to the calling code.  */
 struct evo_Config
 {
     /* Internals */
