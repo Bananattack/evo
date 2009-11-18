@@ -236,7 +236,7 @@ struct evo_Context
         Encoding is abstracted, but user-defined evolutionary operators
         must share the same encoding or else the results of the algorithm are undefined.
     */
-	void** genes;    
+    void** genes;    
     /*
         A fitness value for each gene in the population. 
         Typically, a selection operator will try to maximize the fitness.
@@ -244,7 +244,7 @@ struct evo_Context
         However, the particular encoding depends on agreed upon encoding for fitness values
         between the fitness operator and the selection operator.
     */
-	double* fitnesses;
+    double* fitnesses;
     
     /* Selection-related data. After each generation, these are wiped. */
     evo_uint breedEventSize; /* Size consumed by active breeding entries. Always a multiple of 4. */

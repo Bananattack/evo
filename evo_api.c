@@ -18,8 +18,8 @@ struct evo_Config
     evo_bool used; /* Whether or not this configuration has already been utilized. */
 
     /* Attributes */
-	evo_uint threadCount; /* Total number of threads that can run at once. */
-	evo_uint trialsPerThread; /* Number of trials of the evolutionary algorithm to run on each thread */
+    evo_uint threadCount; /* Total number of threads that can run at once. */
+    evo_uint trialsPerThread; /* Number of trials of the evolutionary algorithm to run on each thread */
     evo_uint maxIterations; /* The maximum number of iterations to run for, before marking a run as a failure. */
     evo_uint populationSize; /* The size of the population in the evolutionary algorithm. */
 
