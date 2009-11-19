@@ -106,9 +106,14 @@ typedef evo_bool (*evo_SuccessPredicate)(evo_Context* context);
     User callbacks should not rely on call order relative to other user callbacks.
     This means that callbacks should probably agree on what memory can get manipulated by each, exclusively.
 */
-typedef void (*evo_UserCallback)(evo_Context* context);
+typedef void (*evo_UserCallback)(evo_Context* context, void* param);
+/*
+    A function to be called as the configuration is being freed.
 
-
+    This might invoke a free routine for userdata passed as a parameter in an earlier
+    user callback.
+*/
+typedef void (*evo_UserFinalizer)(void* param);
 
 /* Creates a new cnfiguration for the evolutionary algorithm. */
 evo_Config* evo_Config_New();
@@ -160,8 +165,9 @@ void evo_Config_SetMutationOperator(evo_Config* config, evo_MutationOperator mut
 
 void evo_Config_SetSuccessPredicate(evo_Config* config, evo_SuccessPredicate terminationPredicate);
 /* Optional callbacks. */
-void evo_Config_AddContextStartCallback(evo_Config* config, evo_UserCallback cb);
-void evo_Config_AddContextEndCallback(evo_Config* config, evo_UserCallback cb);
+void evo_Config_AddContextStartCallback(evo_Config* config, evo_UserCallback cb, void* param);
+void evo_Config_AddContextEndCallback(evo_Config* config, evo_UserCallback cb, void* param);
+void evo_Config_AddConfigFinalizer(evo_Config* config, evo_UserFinalizer cb, void* param);
 /* Starts execution across multiple threads. */
 void evo_Config_Execute(evo_Config* config);
 
@@ -187,6 +193,8 @@ struct evo_Stats
     double minIteration;
     double maxSuccessIteration;
     double maxIteration;
+    /* The best fitness of any population */
+    double bestFitness;
 };
 
 /* A structure containing various information utilized by each thread in the evolutionary algorithm. */

@@ -11,6 +11,20 @@
 
 static void* _evo_RunThread(void* arg);
 
+typedef struct
+{
+    evo_uint count;
+    evo_UserCallback cb[MAX_CALLBACKS];
+    void* param[MAX_CALLBACKS];
+} UserCallbackInfo;
+
+typedef struct
+{
+    evo_uint count;
+    evo_UserFinalizer cb[MAX_CALLBACKS];
+    void* param[MAX_CALLBACKS];
+} UserFinalizerInfo;
+
 /* The configuration structure. Intended to be an opaque data-type to the calling code.  */
 struct evo_Config
 {
@@ -36,11 +50,10 @@ struct evo_Config
     /* Statistics. Filled after the algorithms are completely finished. */
     evo_Stats stats;
     
-    /* Number of user callbacks assigned to this configuration. */
-    evo_uint cbContextStartCount;
-    evo_uint cbContextEndCount;
-    evo_UserCallback cbContextStart[MAX_CALLBACKS];
-    evo_UserCallback cbContextEnd[MAX_CALLBACKS];
+    /* Different user function hooks assigned to this configuration. */
+    UserCallbackInfo contextStart;
+    UserCallbackInfo contextEnd;
+    UserFinalizerInfo configFinalizer;
 };
 
 #define RETURN_IF_INVALID(c) \
@@ -68,8 +81,15 @@ evo_Config* evo_Config_New()
 
 void evo_Config_Free(evo_Config* config)
 {
+    evo_uint i;
     if(!config->running)
     {
+        /* Invoke all user config finalizer callbacks */
+        for(i = 0; i < config->configFinalizer.count; i++)
+        {
+            config->configFinalizer.cb[i](config->configFinalizer.param[i]);
+        }
+        /* Free the rest. */
         free(config);
     }
 }
@@ -100,25 +120,22 @@ EVO_ATTR_SETTER(evo_Config_SetMutationOperator, mutationOperator, evo_MutationOp
 EVO_ATTR_SETTER(evo_Config_SetSuccessPredicate, successPredicate, evo_SuccessPredicate)
 
 /* Optional callbacks. */
-void evo_Config_AddContextStartCallback(evo_Config* config, evo_UserCallback cb)
-{
-    RETURN_IF_INVALID(config);
-    if(config->cbContextStartCount >= MAX_CALLBACKS)
-    {
-        return;
+#define EVO_CALLBACK_ADDER(func, attr, cbType) \
+    void func(evo_Config* config, cbType cb, void* param) \
+    { \
+        RETURN_IF_INVALID(config); \
+        if(attr.count >= MAX_CALLBACKS) \
+        { \
+            return; \
+        } \
+        attr.cb[attr.count] = cb; \
+        attr.param[attr.count] = param; \
+        attr.count++; \
     }
-    config->cbContextStart[config->cbContextStartCount++] = cb;
-}
 
-void evo_Config_AddContextEndCallback(evo_Config* config, evo_UserCallback cb)
-{
-    RETURN_IF_INVALID(config);
-    if(config->cbContextEndCount >= MAX_CALLBACKS)
-    {
-        return;
-    }
-    config->cbContextEnd[config->cbContextEndCount++] = cb;
-}
+EVO_CALLBACK_ADDER(evo_Config_AddContextStartCallback, config->contextStart, evo_UserCallback)
+EVO_CALLBACK_ADDER(evo_Config_AddContextEndCallback, config->contextEnd, evo_UserCallback)
+EVO_CALLBACK_ADDER(evo_Config_AddConfigFinalizer, config->configFinalizer, evo_UserFinalizer)
 
 /* Aggregates statistics after all trials are finished. */
 static void _evo_Config_PopulateStats(evo_Config* config, evo_Context** contexts)
@@ -140,7 +157,7 @@ static void _evo_Config_PopulateStats(evo_Config* config, evo_Context** contexts
         overall->sumSquaredIterations += stats->sumSquaredIterations;
         overall->sumSuccessIterations += stats->sumSuccessIterations;
         overall->sumSquaredSuccessIterations += stats->sumSquaredSuccessIterations;
-        
+ 
         if(stats->minIteration < overall->minIteration || i == 0)
         {
             overall->minIteration = stats->minIteration;
@@ -152,6 +169,10 @@ static void _evo_Config_PopulateStats(evo_Config* config, evo_Context** contexts
         if(stats->maxIteration > overall->maxIteration)
         {
             overall->maxIteration = stats->maxIteration;
+        }
+        if(stats->bestFitness > overall->bestFitness)
+        {
+            overall->bestFitness = stats->bestFitness;
         }
     }
 }
@@ -283,9 +304,9 @@ static void* _evo_RunThread(void* arg)
     context->markedGenes = malloc(populationSize * sizeof(evo_bool));
     
     /* Invoke all user start-of-run callbacks */
-    for(i = 0; i < config->cbContextStartCount; i++)
+    for(i = 0; i < config->contextStart.count; i++)
     {
-        config->cbContextStart[i](context);
+        config->contextStart.cb[i](context, config->contextStart.param[i]);
     }
 
     /* Keep going until every iteration has completed. */
@@ -378,6 +399,10 @@ static void* _evo_RunThread(void* arg)
         {
             context->stats.maxIteration = context->iteration;
         }
+        if(context->bestFitness > context->stats.bestFitness)
+        {
+            context->stats.bestFitness = context->bestFitness;
+        }
         
         context->stats.sumIterations += context->iteration;
         context->stats.sumSquaredIterations += context->iteration * context->iteration;
@@ -387,9 +412,9 @@ static void* _evo_RunThread(void* arg)
     context->stats.trials += context->trial;
     
     /* Invoke all user end-of-run callbacks */
-    for(i = 0; i < config->cbContextEndCount; i++)
+    for(i = 0; i < config->contextEnd.count; i++)
     {
-        config->cbContextEnd[i](context);
+        config->contextEnd.cb[i](context, config->contextEnd.param[i]);
     }
     
     /* Free the population */
