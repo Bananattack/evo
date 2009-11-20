@@ -1,6 +1,12 @@
 #ifndef EVO_API_H
 #define EVO_API_H
 
+#ifdef WINDOWS
+#define EVO_USE_MULTITHREAD_RAND
+#else
+#define EVO_USE_RAND_R
+#endif
+
 
 /* An wrapper for boolean types, since C's stdbool is only C99. */
 #define EVO_TRUE 1
@@ -141,15 +147,32 @@ evo_Stats* evo_Config_GetStats(evo_Config* config);
 /*
     Attributes
     
-    Thread count: the number of threads to use.
-    Trials per thread: the number of times to run the genetic algorithm across the number of threads.
-    Max iterations: The maximum number of iterations to run a trial for, before marking a trial as a failure.
-    Population size: the number of genes in the population.
+    Unit count:
+        The number of parallel units (threads/processes) to use.
+    Trials:
+        Number of trials of the evolutionary algorithm to run.
+        Must be divisible by number of units.
+    Max iterations:
+        The maximum number of iterations to run a trial for, before marking
+        a trial as a failure.
+    Population size:
+        The number of genes in the population.
+    Random seed:
+        (Optional) The pseudorandom number seed.
+        This number is used for the first random stream,
+        and every subsequent seed is offset by some amount relative to it.
+        Must be >= number of units.
+    Random stream count:
+        (Optional) When set, overrides the default setting of
+        one pseudo-random number stream per unit.
+        (Might be useful when comparing for consistency across different unit counts.)
 */
-void evo_Config_SetThreadCount(evo_Config* config, evo_uint threadCount);
-void evo_Config_SetTrialsPerThread(evo_Config* config, evo_uint trialsPerThread);
+void evo_Config_SetUnitCount(evo_Config* config, evo_uint unitCount);
+void evo_Config_SetTrials(evo_Config* config, evo_uint trials);
 void evo_Config_SetMaxIterations(evo_Config* config, evo_uint maxIterations);
 void evo_Config_SetPopulationSize(evo_Config* config, evo_uint populationSize);
+void evo_Config_SetRandomSeed(evo_Config* config, evo_uint randomSeed);
+void evo_Config_SetRandomStreamCount(evo_Config* config, evo_uint randomStreamCount);
 /*
     Callbacks
     
@@ -206,7 +229,7 @@ struct evo_Context
         The thread id, which might be useful if for some reason global storage is required by
         part of the algorithm.
     */
-    evo_uint threadID;
+    evo_uint id;
   
     
     /* The number of trials that this thread has run of the evolutionary algorithm */
@@ -253,6 +276,11 @@ struct evo_Context
     evo_bool* markedGenes; /* Checklist of which parents/children are already marked for selection. */
     /* Userdata for selection operator. */
     void* selectionUserData;
+
+    /* Random stream iteration. */
+    evo_uint seedIndexStart, seedIndexEnd;
+    evo_uint seedIndex;
+    evo_uint seed;
 };
 
 /*
@@ -265,6 +293,14 @@ struct evo_Context
 evo_bool evo_Context_AddBreedEvent(evo_Context* context,
     evo_uint parentA, evo_uint parentB, evo_uint childA, evo_uint childB);
 
+/*
+    Generates a random double in the interval [0, 1).
+*/
+double evo_Random(evo_Context* context);
 
+/*
+    Generates a random integer between the interval [low, high)
+*/
+int evo_RandomInt(evo_Context* context, int low, int high);
 
 #endif

@@ -1,13 +1,9 @@
+#include <evo_select_tournament.h>
 #include "tests.h"
 
 #define BOARD_WIDTH 4
 #define BOARD_HEIGHT 6
 #define GENE_SIZE 42
-
-int Random(int size)
-{
-    return ((double) rand()) / ((double) RAND_MAX + 1.0) * size;
-}
 
 evo_bool Initializer(evo_Context* context, evo_uint populationSize)
 {
@@ -28,7 +24,7 @@ evo_bool Initializer(evo_Context* context, evo_uint populationSize)
         gene = context->genes[i];
         for(j = 0; j < GENE_SIZE; j++)
         {
-            switch(Random(4))
+            switch(evo_RandomInt(context, 0, 4))
             {
                 case 0: gene[j] = 'U'; break;
                 case 1: gene[j] = 'D'; break;
@@ -109,120 +105,6 @@ double Fitness(evo_Context* context, void* d)
     return fitness;
 }
 
-
-
-#define MIN(a,b) ((a) < (b) ? (a) : (b))
-
-typedef struct
-{
-    evo_uint populationSize;
-    evo_uint tournamentSize;
-} TournamentSelectData;
-
-typedef struct
-{
-    TournamentSelectData* data;
-    evo_uint* rank;
-} TournamentSelectContext;
-
-void TournamentSelectBefore(evo_Context* context, void* param)
-{
-    TournamentSelectContext* tsc;
-
-    tsc = malloc(sizeof(TournamentSelectContext));
-    tsc->data = param;
-    tsc->rank = malloc(sizeof(evo_uint) * tsc->data->populationSize);
-
-    context->selectionUserData = tsc;
-}
-
-void TournamentSelectAfter(evo_Context* context, void* param)
-{
-    TournamentSelectContext* tsc = context->selectionUserData;
-
-    free(tsc->rank);
-    free(tsc);
-}
-
-void TournamentSelectPerform(evo_Context* context, evo_uint populationSize)
-{
-	int i, j, k, t;
-	int minimum;
-	int size;
-    evo_uint tournamentSize;
-    evo_uint* rank;
-    double* fitnesses;
-    TournamentSelectContext* tsc;
-
-    tsc = context->selectionUserData;
-    tournamentSize = tsc->data->tournamentSize;
-    rank = tsc->rank;
-    fitnesses = context->fitnesses;
-
-	// Fill array.
-	for(i = 0; i < populationSize; i++)
-	{
-		rank[i] = i;
-	}
-	// Shuffle array.
-	for(i = 0; i < populationSize; i++)
-	{
-		j = Random(populationSize);
-		t = rank[i];
-		rank[i] = rank[j];
-		rank[j] = t;
-	}
-	// Iterate over each of the tournaments.
-	for(i = 0; i < populationSize; i += tournamentSize)
-	{
-		// Sort the tournaments by fitness.
-		// Uses selection sort because I'm lazy.
-		size = MIN(i + tournamentSize, populationSize);
-		for(j = i; j < size - 1; j++)
-		{
-			minimum = j;
-			for(k = j + 1; k < size; k++)
-			{
-				if(fitnesses[rank[k]] < fitnesses[rank[minimum]])
-				{
-					minimum = k;
-				}
-			}
-			if(j != minimum)
-			{
-				t = rank[j];
-				rank[j] = rank[minimum];
-				rank[minimum] = t;
-			}
-		}
-        evo_Context_AddBreedEvent(context,
-            rank[i + tournamentSize - 1],
-            rank[i + tournamentSize - 2],
-            rank[i],
-            rank[i + 1]
-        ); 
-	}
-}
-
-void TournamentSelectFinalize(void* data)
-{
-    free(data);
-}
-
-void TournamentSelectInit(evo_Config* config, evo_uint populationSize,  evo_uint tournamentSize)
-{
-    TournamentSelectData* data;
-    data = malloc(sizeof(TournamentSelectData));
-
-    data->populationSize = populationSize;
-    data->tournamentSize = tournamentSize;
-
-    evo_Config_AddContextStartCallback(config, TournamentSelectBefore, data);
-    evo_Config_SetSelectionOperator(config, TournamentSelectPerform);
-    evo_Config_AddContextEndCallback(config, TournamentSelectAfter, data);
-    evo_Config_AddConfigFinalizer(config, TournamentSelectFinalize, data);
-}
-
 /* Two-point Crossover */
 void Crossover(evo_Context* context,
     void* parentA, void* parentB, void* childA, void* childB)
@@ -233,8 +115,8 @@ void Crossover(evo_Context* context,
     char* ca = childA;
     char* cb = childB;
     
-    cp1 = Random(GENE_SIZE);
-    cp2 = Random(GENE_SIZE);
+    cp1 = evo_RandomInt(context, 0, GENE_SIZE);
+    cp2 = evo_RandomInt(context, 0, GENE_SIZE);
     if(cp1 > cp2)
     {
         i = cp1;
@@ -263,12 +145,12 @@ void Mutation(evo_Context* context, void* d)
 {
     char* gene = d;
     evo_uint i;
-    evo_uint count = Random(5) + 1;
+    evo_uint count = evo_RandomInt(context, 0, 5) + 1;
     while(count)
     {
         count--;
-        i = Random(GENE_SIZE);
-        switch(Random(4))
+        i = evo_RandomInt(context, 0, GENE_SIZE);
+        switch(evo_RandomInt(context, 0, 4))
         {
             case 0: gene[i] = 'U'; break;
             case 1: gene[i] = 'D'; break;
@@ -287,16 +169,60 @@ TEST(super_simple_main)
 {
     evo_Stats* stats;
 	evo_Config* config = evo_Config_New();
+/*
+Context 0 running 100 trials with seed 0
+Context 1 running 100 trials with seed 100071
+Context 2 running 100 trials with seed 200142
+Context 3 running 100 trials with seed 300213
+Context 4 running 100 trials with seed 400284
+Context 11 running 100 trials with seed 1100781
+Context 5 running 100 trials with seed 500355
+Context 6 running 100 trials with seed 600426
+Context 7 running 100 trials with seed 700497
+Context 8 running 100 trials with seed 800568
+Context 9 running 100 trials with seed 900639
+Context 10 running 100 trials with seed 1000710
+Context 13 running 100 trials with seed 1300923
+Context 12 running 100 trials with seed 1200852
+Context 14 running 100 trials with seed 1400994
+Context 15 running 100 trials with seed 1501065
+DING DING DING DING
 
-    evo_Config_SetThreadCount(config, 16);
-    evo_Config_SetTrialsPerThread(config, 100);
+Failures 344/1600
+Best fitness 24.000000
+*/
+/*
+Context 0 running 100 trials with seed 0
+Context 0 running 100 trials with seed 100071
+Context 0 running 100 trials with seed 200142
+Context 0 running 100 trials with seed 300213
+Context 0 running 100 trials with seed 400284
+Context 0 running 100 trials with seed 500355
+Context 0 running 100 trials with seed 600426
+Context 0 running 100 trials with seed 700497
+Context 0 running 100 trials with seed 800568
+Context 0 running 100 trials with seed 900639
+Context 0 running 100 trials with seed 1000710
+Context 0 running 100 trials with seed 1100781
+Context 0 running 100 trials with seed 1200852
+Context 0 running 100 trials with seed 1300923
+Context 0 running 100 trials with seed 1400994
+Context 0 running 100 trials with seed 1501065
+DING DING DING DING
+
+Failures 344/100
+Best fitness 24.000000
+*/
+    evo_Config_SetUnitCount(config, 16);
+    evo_Config_SetRandomStreamCount(config, 16);
+    evo_Config_SetTrials(config, 1600);
     evo_Config_SetMaxIterations(config, 1000);
     evo_Config_SetPopulationSize(config, 1000);
 
     evo_Config_SetPopulationInitializer(config, Initializer);
     evo_Config_SetPopulationFinalizer(config, Finalizer);
     evo_Config_SetFitnessOperator(config, Fitness);
-    TournamentSelectInit(config, 1000, 4);
+    evo_UseTournamentSelection(config, 1000, 4);
     evo_Config_SetCrossoverOperator(config, Crossover);
     evo_Config_SetMutationOperator(config, Mutation);
     evo_Config_SetSuccessPredicate(config, Success);
