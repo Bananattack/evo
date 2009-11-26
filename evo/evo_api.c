@@ -389,7 +389,7 @@ static void* _evo_RunThread(void* arg)
             {
                 /* Clear things for the selection operator. */
                 context->breedEventSize = 0;
-                memset(context->markedGenes, 0, populationSize);
+                memset(context->markedGenes, 0, populationSize * sizeof(evo_bool));
                 /* Perform user-defined selection */
                 config->selectionOperator(context, populationSize);
                 

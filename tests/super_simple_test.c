@@ -1,9 +1,15 @@
 #include <evo_select_tournament.h>
+//#include <evo_select_roulette.h>
 #include "tests.h"
 
-#define BOARD_WIDTH 4
-#define BOARD_HEIGHT 6
-#define GENE_SIZE 42
+#define THREADS 16
+#define TRIALS ((THREADS)*100)
+#define MAX_ITERATIONS 1000
+#define POPULATION 1000
+
+#define BOARD_WIDTH 5
+#define BOARD_HEIGHT 5
+#define GENE_SIZE ((BOARD_WIDTH)*(BOARD_HEIGHT)-1)
 
 evo_bool Initializer(evo_Context* context, evo_uint populationSize)
 {
@@ -61,10 +67,11 @@ double Fitness(evo_Context* context, void* d)
     gene = (char*) d;
     memset(board, 0, sizeof(evo_bool) * BOARD_WIDTH * BOARD_HEIGHT);
     
+    board[0] = 1;
     /* Move through the board. */
     for(i = 0; i < GENE_SIZE; i++)
     {
-        board[y * BOARD_WIDTH + x] = 1;
+        /* Parse move string. */
         switch(gene[i])
         {
             case 'U':
@@ -92,6 +99,8 @@ double Fitness(evo_Context* context, void* d)
                 }
                 break;
         }
+        /* Mark this spot. */
+        board[y * BOARD_WIDTH + x] = 1;
     }
 
     /* Reward one point for each space covered. */
@@ -137,7 +146,7 @@ void Crossover(evo_Context* context,
     for(i = cp2; i < GENE_SIZE; i++)
     {
         ca[i] = pa[i];
-        cb[i] = pb[i];;
+        cb[i] = pb[i];
     }
 }
 
@@ -169,60 +178,18 @@ TEST(super_simple_main)
 {
     evo_Stats* stats;
 	evo_Config* config = evo_Config_New();
-/*
-Context 0 running 100 trials with seed 0
-Context 1 running 100 trials with seed 100071
-Context 2 running 100 trials with seed 200142
-Context 3 running 100 trials with seed 300213
-Context 4 running 100 trials with seed 400284
-Context 11 running 100 trials with seed 1100781
-Context 5 running 100 trials with seed 500355
-Context 6 running 100 trials with seed 600426
-Context 7 running 100 trials with seed 700497
-Context 8 running 100 trials with seed 800568
-Context 9 running 100 trials with seed 900639
-Context 10 running 100 trials with seed 1000710
-Context 13 running 100 trials with seed 1300923
-Context 12 running 100 trials with seed 1200852
-Context 14 running 100 trials with seed 1400994
-Context 15 running 100 trials with seed 1501065
-DING DING DING DING
 
-Failures 344/1600
-Best fitness 24.000000
-*/
-/*
-Context 0 running 100 trials with seed 0
-Context 0 running 100 trials with seed 100071
-Context 0 running 100 trials with seed 200142
-Context 0 running 100 trials with seed 300213
-Context 0 running 100 trials with seed 400284
-Context 0 running 100 trials with seed 500355
-Context 0 running 100 trials with seed 600426
-Context 0 running 100 trials with seed 700497
-Context 0 running 100 trials with seed 800568
-Context 0 running 100 trials with seed 900639
-Context 0 running 100 trials with seed 1000710
-Context 0 running 100 trials with seed 1100781
-Context 0 running 100 trials with seed 1200852
-Context 0 running 100 trials with seed 1300923
-Context 0 running 100 trials with seed 1400994
-Context 0 running 100 trials with seed 1501065
-DING DING DING DING
-
-Failures 344/100
-Best fitness 24.000000
-*/
-    evo_Config_SetUnitCount(config, 16);
-    evo_Config_SetRandomStreamCount(config, 16);
-    evo_Config_SetTrials(config, 1600);
-    evo_Config_SetMaxIterations(config, 1000);
-    evo_Config_SetPopulationSize(config, 1000);
+    evo_Config_SetUnitCount(config, THREADS);
+    evo_Config_SetRandomStreamCount(config, THREADS);
+    evo_Config_SetTrials(config, TRIALS);
+    evo_Config_SetMaxIterations(config, MAX_ITERATIONS);
+    evo_Config_SetPopulationSize(config, POPULATION);
 
     evo_Config_SetPopulationInitializer(config, Initializer);
     evo_Config_SetPopulationFinalizer(config, Finalizer);
     evo_Config_SetFitnessOperator(config, Fitness);
-    evo_UseTournamentSelection(config, 1000, 4);
+    evo_UseTournamentSelection(config, POPULATION, 4);
+    /*evo_UseRouletteSelection(config, POPULATION);*/
     evo_Config_SetCrossoverOperator(config, Crossover);
     evo_Config_SetMutationOperator(config, Mutation);
     evo_Config_SetSuccessPredicate(config, Success);

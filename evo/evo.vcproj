@@ -158,6 +158,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\evo_select_roulette.c"
+				>
+			</File>
+			<File
 				RelativePath=".\evo_select_tournament.c"
 				>
 			</File>
@@ -169,6 +173,10 @@
 			>
 			<File
 				RelativePath=".\evo_api.h"
+				>
+			</File>
+			<File
+				RelativePath=".\evo_select_roulette.h"
 				>
 			</File>
 			<File
