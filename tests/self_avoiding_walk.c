@@ -11,7 +11,7 @@
 #define BOARD_HEIGHT 5
 #define GENE_SIZE ((BOARD_WIDTH)*(BOARD_HEIGHT)-1)
 
-evo_bool Initializer(evo_Context* context, evo_uint populationSize)
+static evo_bool Initializer(evo_Context* context, evo_uint populationSize)
 {
     evo_uint i, j;
     char* gene;
@@ -44,7 +44,7 @@ evo_bool Initializer(evo_Context* context, evo_uint populationSize)
     return 1;
 }
 
-void Finalizer(evo_Context* context, evo_uint populationSize)
+static void Finalizer(evo_Context* context, evo_uint populationSize)
 {
     evo_uint i;
     for(i = 0; i < populationSize; i++)
@@ -55,7 +55,7 @@ void Finalizer(evo_Context* context, evo_uint populationSize)
     return;
 }
 
-double Fitness(evo_Context* context, void* d)
+static double Fitness(evo_Context* context, void* d)
 {
     char* gene;
     double fitness;
@@ -115,7 +115,7 @@ double Fitness(evo_Context* context, void* d)
 }
 
 /* Two-point Crossover */
-void Crossover(evo_Context* context,
+static void Crossover(evo_Context* context,
     void* parentA, void* parentB, void* childA, void* childB)
 {
     evo_uint cp1, cp2, i;
@@ -150,7 +150,7 @@ void Crossover(evo_Context* context,
     }
 }
 
-void Mutation(evo_Context* context, void* d)
+static void Mutation(evo_Context* context, void* d)
 {
     char* gene = d;
     evo_uint i;
@@ -169,12 +169,12 @@ void Mutation(evo_Context* context, void* d)
     }
 }
 
-evo_bool Success(evo_Context* context)
+static evo_bool Success(evo_Context* context)
 {
     return context->bestFitness == BOARD_WIDTH * BOARD_HEIGHT;
 }
 
-TEST(super_simple_main)
+TEST(self_avoiding_walk)
 {
     evo_Stats* stats;
 	evo_Config* config = evo_Config_New();

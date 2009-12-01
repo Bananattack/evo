@@ -167,7 +167,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\super_simple_test.c"
+				RelativePath=".\prisoner.c"
+				>
+			</File>
+			<File
+				RelativePath=".\self_avoiding_walk.c"
 				>
 			</File>
 			<File

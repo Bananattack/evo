@@ -9,7 +9,20 @@
 #define TEST(func) \
     int func(int argc, char** argv)
 
-TEST(super_simple_main);
+TEST(self_avoiding_walk);
+TEST(prisoner);
+
+typedef struct 
+{
+    const char* name;
+    int (*cb)(int, char**);
+} TestData;
+
+static const TestData testList[] = {
+    {"saw", self_avoiding_walk},
+    {"prisoner", prisoner},
+    {NULL, NULL},
+};
 
 
 #endif
