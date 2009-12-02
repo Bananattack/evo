@@ -17,7 +17,7 @@ typedef struct
 
 static void ContextStart(evo_Context* context, void* data);
 static void ContextEnd(evo_Context* context, void* data);
-static void Selection(evo_Context* context, evo_uint populationSize);
+static void Selection(evo_Context* context);
 
 void evo_UseTournamentSelection(evo_Config* config, evo_uint populationSize,  evo_uint tournamentSize)
 {
@@ -52,7 +52,7 @@ static void ContextEnd(evo_Context* context, void* selectionConfig)
     free(selectionContext);
 }
 
-static void Selection(evo_Context* context, evo_uint populationSize)
+static void Selection(evo_Context* context)
 {
 	int i, j, k, t;
 	int minimum;
@@ -61,6 +61,7 @@ static void Selection(evo_Context* context, evo_uint populationSize)
     evo_uint* rank;
     double* fitnesses;
     TournamentSelectionContext* selectionContext;
+    evo_uint populationSize = evo_Context_GetPopulationSize(context);
 
     selectionContext = context->selectionUserData;
     tournamentSize = selectionContext->selectionConfig->tournamentSize;

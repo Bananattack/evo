@@ -52,7 +52,7 @@ typedef struct evo_Stats evo_Stats;
     If the initialization succeeds, this function should return true.
     Otherwise, return false to indicate there was a failure (allocation, or whatever).
 */
-typedef evo_bool (*evo_PopulationInitializer)(evo_Context* context, evo_uint populationSize);
+typedef evo_bool (*evo_PopulationInitializer)(evo_Context* context);
 /*
     The population finalizer.
     
@@ -62,14 +62,14 @@ typedef evo_bool (*evo_PopulationInitializer)(evo_Context* context, evo_uint pop
     This function is expected to free the memory associated with every gene in the context.
     
 */
-typedef void (*evo_PopulationFinalizer)(evo_Context* context, evo_uint populationSize);
+typedef void (*evo_PopulationFinalizer)(evo_Context* context);
 
 /*
     The fitness operator.
     
-    Takes a gene, and returns a numeric value, assessing how good thaat particular gene is.
+    Iterates over all genes, and returns a numeric value, assessing how good thaat particular gene is.
 */
-typedef double (*evo_FitnessOperator)(evo_Context* context, void* gene);
+typedef void (*evo_FitnessOperator)(evo_Context* context);
 /*
     The selection operator.
     
@@ -78,7 +78,7 @@ typedef double (*evo_FitnessOperator)(evo_Context* context, void* gene);
     It should use evo_Context_AddParents and evo_Context_AddChildren to construct the list
     used by crossover and mutation.
 */
-typedef void (*evo_SelectionOperator)(evo_Context* context, evo_uint populationSize);
+typedef void (*evo_SelectionOperator)(evo_Context* context);
 /*
     The crossover operator.
     
@@ -94,7 +94,6 @@ typedef void (*evo_CrossoverOperator)(evo_Context* context,
     Takes a child gene (created by crossover) and rearranges its contents in some manner.
 */
 typedef void (*evo_MutationOperator)(evo_Context* context, void* gene);
-
 /*
     The success predicate.
 
@@ -105,6 +104,7 @@ typedef void (*evo_MutationOperator)(evo_Context* context, void* gene);
     However, when that occurs, the algorithm marks that particular iteration as a failure.
 */
 typedef evo_bool (*evo_SuccessPredicate)(evo_Context* context);
+
 /*
     A callback into user code.
     
@@ -280,18 +280,27 @@ struct evo_Context
     /* Random stream iteration. */
     evo_uint seedIndexStart, seedIndexEnd;
     evo_uint seedIndex;
-    evo_uint seed;
+    evo_uint prevSeed, seed;
 };
 
 /*
     For ease-of-use with the selection operator.
-    AddBreedEvent takes valid indexes within the genes array to be chosen as parents/children.
+    AddBreedEvent takes valid indexes within the genes array to be chosen as parents/children.    
 
     If it successfully added the parents/children, then it will return 1.
     However, if any of the genes was already chosen by a previous call, then it will return 0.
 */
 evo_bool evo_Context_AddBreedEvent(evo_Context* context,
     evo_uint parentA, evo_uint parentB, evo_uint childA, evo_uint childB);
+/*
+    Unmarked breed events allow duplicate parents.
+*/
+void evo_Context_AddUnmarkedBreedEvent(evo_Context* context,
+    evo_uint parentA, evo_uint parentB, evo_uint childA, evo_uint childB);
+/*
+    Returns the population size.
+*/
+evo_uint evo_Context_GetPopulationSize(evo_Context* context);
 
 /*
     Generates a random double in the interval [0, 1).

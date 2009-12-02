@@ -9,6 +9,9 @@
 #define TEST(func) \
     int func(int argc, char** argv)
 
+void StartTime();
+double EndTime();
+
 TEST(self_avoiding_walk);
 TEST(prisoner);
 
@@ -17,12 +20,5 @@ typedef struct
     const char* name;
     int (*cb)(int, char**);
 } TestData;
-
-static const TestData testList[] = {
-    {"saw", self_avoiding_walk},
-    {"prisoner", prisoner},
-    {NULL, NULL},
-};
-
 
 #endif

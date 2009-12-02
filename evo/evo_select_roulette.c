@@ -4,7 +4,7 @@
 
 static void ContextStart(evo_Context* context, void* data);
 static void ContextEnd(evo_Context* context, void* data);
-static void Selection(evo_Context* context, evo_uint populationSize);
+static void Selection(evo_Context* context);
 
 void evo_UseRouletteSelection(evo_Config* config, evo_uint populationSize)
 {
@@ -28,7 +28,7 @@ static void ContextEnd(evo_Context* context, void* data)
     free(context->selectionUserData);
 }
 
-static void Selection(evo_Context* context, evo_uint populationSize)
+static void Selection(evo_Context* context)
 {
     evo_uint i, j, k, lastUnmarked;
     evo_uint parents[2], children[2];
@@ -36,8 +36,10 @@ static void Selection(evo_Context* context, evo_uint populationSize)
     double p = 0;
     double sum = 0;
     double sumProbabilities = 0;
-    
+    evo_uint populationSize;
+
     probabilities = (double*) context->selectionUserData;
+    populationSize = evo_Context_GetPopulationSize(context);
 
     for(i = 0; i < populationSize; i++)
     {

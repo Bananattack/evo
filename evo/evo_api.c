@@ -6,6 +6,8 @@
 #include <pthread.h>
 /* Library internals. */
 #include "evo_api.h"
+#include <assert.h>
+
 
 #define MAX_CALLBACKS 8
 
@@ -219,7 +221,6 @@ void evo_Config_Execute(evo_Config* config)
     RETURN_IF_INVALID(config);
     if(!config->unitCount
         || !config->trials
-        || config->trials % config->unitCount != 0 /* Must be divisible by units. */
         || !config->maxIterations
         || !config->populationSize
         || !config->populationInitializer
@@ -239,6 +240,17 @@ void evo_Config_Execute(evo_Config* config)
     }
     /* Every unit NEEDS a random stream. */
     else if(config->randomStreamCount < config->unitCount)
+    {
+        return;
+    }
+
+    /* Trials must be divisible by the number of streams */
+    if(config->trials % config->randomStreamCount)
+    {
+        return;
+    }
+    /* The number of streams must be divisible by the number of units */
+    if(config->randomStreamCount % config->unitCount)
     {
         return;
     }
@@ -332,7 +344,7 @@ static void* _evo_RunThread(void* arg)
     evo_bool success;
     evo_Context* context;
     evo_Config* config;
-    evo_uint i, j;
+    evo_uint i/*, j*/;
     evo_uint id, trialsPerUnit, maxIterations, populationSize;
     
     context = (evo_Context*) arg;
@@ -344,7 +356,7 @@ static void* _evo_RunThread(void* arg)
     }
     else
     {
-        trialsPerUnit = config->trials / config->unitCount / (context->seedIndexEnd - context->seedIndexStart);
+        trialsPerUnit = config->trials /* (context->seedIndexEnd - context->seedIndexStart)*/ / config->randomStreamCount;
     }
     maxIterations = config->maxIterations;
     populationSize = config->populationSize;
@@ -369,29 +381,32 @@ static void* _evo_RunThread(void* arg)
         for(context->trial = 0; context->trial < trialsPerUnit; context->trial++)
         {
             /* Initialize/rerandomize the population. */
-            config->populationInitializer(context, populationSize);
-            
-            /* Evaluate all population members' initial fitness. */
-            context->bestFitness = 0;
-            for(i = 0; i < populationSize; i++)
-            {
-                context->fitnesses[i] = config->fitnessOperator(context, context->genes[i]);
-                if(context->fitnesses[i] > context->bestFitness)
-                {
-                    context->bestFitness = context->fitnesses[i];
-                }
-            }
+            config->populationInitializer(context);
             
             success = 0;
             
             /* Do the main genetic algorithm. */
             for(context->iteration = 0; context->iteration < maxIterations; context->iteration++)
             {
-                /* Clear things for the selection operator. */
+                /* Clear the fitnesses. */
+                memset(context->fitnesses, 0, populationSize * sizeof(double));
+                /* Evaluate all population members' initial fitnesses. */
+                config->fitnessOperator(context);
+                /* Find the maximum fitness of the population. */
+                context->bestFitness = 0;
+                for(i = 0; i < populationSize; i++)
+                {
+                    if(context->fitnesses[i] > context->bestFitness)
+                    {
+                        context->bestFitness = context->fitnesses[i];
+                    }
+                }
+
+                /* Clear the selection event data. */
                 context->breedEventSize = 0;
                 memset(context->markedGenes, 0, populationSize * sizeof(evo_bool));
                 /* Perform user-defined selection */
-                config->selectionOperator(context, populationSize);
+                config->selectionOperator(context);
                 
                 /* Use the parent and child lists to reproduce. */
                 for(i = 0; i < context->breedEventSize; i += 4)
@@ -404,22 +419,6 @@ static void* _evo_RunThread(void* arg)
                     /* Mutate the children. */
                     config->mutationOperator(context, context->genes[context->breedEvents[i + 2]]);
                     config->mutationOperator(context, context->genes[context->breedEvents[i + 3]]);
-                    
-                    /* Update the fitness of child A */
-                    j = context->breedEvents[i + 2];
-                    context->fitnesses[j] = config->fitnessOperator(context, context->genes[j]);
-                    if(context->fitnesses[j] > context->bestFitness)
-                    {
-                        context->bestFitness = context->fitnesses[j];
-                    }
-                    
-                    /* Update the fitness of child B */
-                    j = context->breedEvents[i + 3];
-                    context->fitnesses[j] = config->fitnessOperator(context, context->genes[j]);
-                    if(context->fitnesses[j] > context->bestFitness)
-                    {
-                        context->bestFitness = context->fitnesses[j];
-                    }
                 }
                 
                 /* Algorithm was successful, stop early. */
@@ -464,9 +463,9 @@ static void* _evo_RunThread(void* arg)
             context->stats.sumSquaredIterations += context->iteration * context->iteration;
             
         }
+        /* Calculate the number of trials. */
+        context->stats.trials += context->trial;
     }
-    /* Calculate the number of trials. */
-    context->stats.trials += context->trial;
     
     /* Invoke all user end-of-run callbacks */
     for(i = 0; i < config->contextEnd.count; i++)
@@ -475,7 +474,7 @@ static void* _evo_RunThread(void* arg)
     }
     
     /* Free the population */
-    context->config->populationFinalizer(context, populationSize);
+    context->config->populationFinalizer(context);
 
     /* Free the previously necessary arrays */
     free(context->fitnesses);
@@ -511,8 +510,15 @@ evo_bool evo_Context_AddBreedEvent(evo_Context* context, evo_uint pa, evo_uint p
     }
 }
 
+evo_uint evo_Context_GetPopulationSize(evo_Context* context)
+{
+    return context->config->populationSize;
+}
+
+
 static evo_bool _evo_NextSeed(evo_Context* context)
 {
+    context->prevSeed = context->seed;
     context->seed = context->config->seeds[context->seedIndex];
 #ifdef EVO_USE_MULTITHREAD_RAND
     srand(context->seed);

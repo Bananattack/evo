@@ -27,6 +27,8 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description="Performing Custom Build Step"
+				CommandLine=""
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -40,7 +42,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../evo"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\evo&quot;"
+				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -58,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../$(ConfigurationName)/evo.lib"
+				AdditionalDependencies="&quot;$(SolutionDir)\$(ConfigurationName)\evo.lib&quot;"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				TargetMachine="1"
@@ -83,6 +86,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="CUSTOM BUILD EVENT EVENT EVENT EVENT GUYS"
+				CommandLine="copy &quot;$(SolutionDir)\pthreads\win32\lib\pthreadVC2.dll&quot; &quot;$(OutDir)\pthreadVC2.dll&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -112,6 +117,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\evo&quot;"
+				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
@@ -128,7 +135,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../evo/$(ConfigurationName)/evo.lib"
+				AdditionalDependencies="&quot;$(SolutionDir)\$(ConfigurationName)\evo.lib&quot;"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
@@ -155,6 +162,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy &quot;$(SolutionDir)\pthreads\win32\lib\pthreadVC2.dll&quot; &quot;$(OutDir)\pthreadVC2.dll&quot;"
 			/>
 		</Configuration>
 	</Configurations>
