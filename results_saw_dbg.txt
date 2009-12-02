@@ -1,0 +1,440 @@
+Running test 'saw'
+Context 0 running 16 trials with seed 0
+Context 0 running 16 trials with seed 100071
+Context 0 running 16 trials with seed 200142
+Context 0 running 16 trials with seed 300213
+Context 0 running 16 trials with seed 400284
+Context 0 running 16 trials with seed 500355
+Context 0 running 16 trials with seed 600426
+Context 0 running 16 trials with seed 700497
+Context 0 running 16 trials with seed 800568
+Context 0 running 16 trials with seed 900639
+Context 0 running 16 trials with seed 1000710
+Context 0 running 16 trials with seed 1100781
+Context 0 running 16 trials with seed 1200852
+Context 0 running 16 trials with seed 1300923
+Context 0 running 16 trials with seed 1400994
+Context 0 running 16 trials with seed 1501065
+Context 0 running 16 trials with seed 1601136
+Context 0 running 16 trials with seed 1701207
+Context 0 running 16 trials with seed 1801278
+Context 0 running 16 trials with seed 1901349
+Context 0 running 16 trials with seed 2001420
+Context 0 running 16 trials with seed 2101491
+Context 0 running 16 trials with seed 2201562
+Context 0 running 16 trials with seed 2301633
+Context 0 running 16 trials with seed 2401704
+Context 0 running 16 trials with seed 2501775
+Context 0 running 16 trials with seed 2601846
+Context 0 running 16 trials with seed 2701917
+Context 0 running 16 trials with seed 2801988
+Context 0 running 16 trials with seed 2902059
+Context 0 running 16 trials with seed 3002130
+Context 0 running 16 trials with seed 3102201
+Context 0 running 16 trials with seed 3202272
+Context 0 running 16 trials with seed 3302343
+Context 0 running 16 trials with seed 3402414
+Context 0 running 16 trials with seed 3502485
+Context 0 running 16 trials with seed 3602556
+Context 0 running 16 trials with seed 3702627
+Context 0 running 16 trials with seed 3802698
+Context 0 running 16 trials with seed 3902769
+Context 0 running 16 trials with seed 4002840
+Context 0 running 16 trials with seed 4102911
+Context 0 running 16 trials with seed 4202982
+Context 0 running 16 trials with seed 4303053
+Context 0 running 16 trials with seed 4403124
+Context 0 running 16 trials with seed 4503195
+Context 0 running 16 trials with seed 4603266
+Context 0 running 16 trials with seed 4703337
+DING DING DING DING
+
+Failures 0/768
+Best fitness 36.000000
+1 threads took 159.523000 seconds to generate self-avoiding walk statistics.
+Running test 'saw'
+Context 0 running 16 trials with seed 0
+Context 1 running 16 trials with seed 2401704
+Context 0 running 16 trials with seed 100071
+Context 1 running 16 trials with seed 2501775
+Context 1 running 16 trials with seed 2601846
+Context 0 running 16 trials with seed 200142
+Context 1 running 16 trials with seed 2701917
+Context 0 running 16 trials with seed 300213
+Context 0 running 16 trials with seed 400284
+Context 1 running 16 trials with seed 2801988
+Context 0 running 16 trials with seed 500355
+Context 1 running 16 trials with seed 2902059
+Context 0 running 16 trials with seed 600426
+Context 1 running 16 trials with seed 3002130
+Context 0 running 16 trials with seed 700497
+Context 1 running 16 trials with seed 3102201
+Context 0 running 16 trials with seed 800568
+Context 1 running 16 trials with seed 3202272
+Context 0 running 16 trials with seed 900639
+Context 1 running 16 trials with seed 3302343
+Context 0 running 16 trials with seed 1000710
+Context 1 running 16 trials with seed 3402414
+Context 0 running 16 trials with seed 1100781
+Context 1 running 16 trials with seed 3502485
+Context 0 running 16 trials with seed 1200852
+Context 1 running 16 trials with seed 3602556
+Context 0 running 16 trials with seed 1300923
+Context 1 running 16 trials with seed 3702627
+Context 0 running 16 trials with seed 1400994
+Context 1 running 16 trials with seed 3802698
+Context 0 running 16 trials with seed 1501065
+Context 1 running 16 trials with seed 3902769
+Context 0 running 16 trials with seed 1601136
+Context 1 running 16 trials with seed 4002840
+Context 0 running 16 trials with seed 1701207
+Context 1 running 16 trials with seed 4102911
+Context 0 running 16 trials with seed 1801278
+Context 1 running 16 trials with seed 4202982
+Context 0 running 16 trials with seed 1901349
+Context 1 running 16 trials with seed 4303053
+Context 0 running 16 trials with seed 2001420
+Context 1 running 16 trials with seed 4403124
+Context 0 running 16 trials with seed 2101491
+Context 1 running 16 trials with seed 4503195
+Context 0 running 16 trials with seed 2201562
+Context 1 running 16 trials with seed 4603266
+Context 0 running 16 trials with seed 2301633
+Context 1 running 16 trials with seed 4703337
+DING DING DING DING
+
+Failures 0/768
+Best fitness 36.000000
+2 threads took 85.138000 seconds to generate self-avoiding walk statistics.
+Running test 'saw'
+Context 0 running 16 trials with seed 0
+Context 1 running 16 trials with seed 1601136
+Context 2 running 16 trials with seed 3202272
+Context 0 running 16 trials with seed 100071
+Context 1 running 16 trials with seed 1701207
+Context 2 running 16 trials with seed 3302343
+Context 1 running 16 trials with seed 1801278
+Context 2 running 16 trials with seed 3402414
+Context 0 running 16 trials with seed 200142
+Context 1 running 16 trials with seed 1901349
+Context 2 running 16 trials with seed 3502485
+Context 0 running 16 trials with seed 300213
+Context 1 running 16 trials with seed 2001420
+Context 2 running 16 trials with seed 3602556
+Context 0 running 16 trials with seed 400284
+Context 1 running 16 trials with seed 2101491
+Context 0 running 16 trials with seed 500355
+Context 2 running 16 trials with seed 3702627
+Context 1 running 16 trials with seed 2201562
+Context 0 running 16 trials with seed 600426
+Context 2 running 16 trials with seed 3802698
+Context 1 running 16 trials with seed 2301633
+Context 0 running 16 trials with seed 700497
+Context 2 running 16 trials with seed 3902769
+Context 1 running 16 trials with seed 2401704
+Context 0 running 16 trials with seed 800568
+Context 2 running 16 trials with seed 4002840
+Context 1 running 16 trials with seed 2501775
+Context 0 running 16 trials with seed 900639
+Context 2 running 16 trials with seed 4102911
+Context 1 running 16 trials with seed 2601846
+Context 0 running 16 trials with seed 1000710
+Context 2 running 16 trials with seed 4202982
+Context 1 running 16 trials with seed 2701917
+Context 0 running 16 trials with seed 1100781
+Context 2 running 16 trials with seed 4303053
+Context 0 running 16 trials with seed 1200852
+Context 1 running 16 trials with seed 2801988
+Context 2 running 16 trials with seed 4403124
+Context 0 running 16 trials with seed 1300923
+Context 1 running 16 trials with seed 2902059
+Context 2 running 16 trials with seed 4503195
+Context 1 running 16 trials with seed 3002130
+Context 0 running 16 trials with seed 1400994
+Context 2 running 16 trials with seed 4603266
+Context 1 running 16 trials with seed 3102201
+Context 0 running 16 trials with seed 1501065
+Context 2 running 16 trials with seed 4703337
+DING DING DING DING
+
+Failures 0/768
+Best fitness 36.000000
+3 threads took 53.822000 seconds to generate self-avoiding walk statistics.
+Running test 'saw'
+Context 0 running 16 trials with seed 0
+Context 1 running 16 trials with seed 1200852
+Context 2 running 16 trials with seed 2401704
+Context 3 running 16 trials with seed 3602556
+Context 2 running 16 trials with seed 2501775
+Context 0 running 16 trials with seed 100071
+Context 1 running 16 trials with seed 1300923
+Context 3 running 16 trials with seed 3702627
+Context 2 running 16 trials with seed 2601846
+Context 0 running 16 trials with seed 200142
+Context 3 running 16 trials with seed 3802698
+Context 1 running 16 trials with seed 1400994
+Context 2 running 16 trials with seed 2701917
+Context 1 running 16 trials with seed 1501065
+Context 3 running 16 trials with seed 3902769
+Context 0 running 16 trials with seed 300213
+Context 3 running 16 trials with seed 4002840
+Context 1 running 16 trials with seed 1601136
+Context 2 running 16 trials with seed 2801988
+Context 0 running 16 trials with seed 400284
+Context 1 running 16 trials with seed 1701207
+Context 3 running 16 trials with seed 4102911
+Context 0 running 16 trials with seed 500355
+Context 2 running 16 trials with seed 2902059
+Context 1 running 16 trials with seed 1801278
+Context 0 running 16 trials with seed 600426
+Context 3 running 16 trials with seed 4202982
+Context 2 running 16 trials with seed 3002130
+Context 1 running 16 trials with seed 1901349
+Context 3 running 16 trials with seed 4303053
+Context 0 running 16 trials with seed 700497
+Context 2 running 16 trials with seed 3102201
+Context 1 running 16 trials with seed 2001420
+Context 0 running 16 trials with seed 800568
+Context 3 running 16 trials with seed 4403124
+Context 2 running 16 trials with seed 3202272
+Context 3 running 16 trials with seed 4503195
+Context 1 running 16 trials with seed 2101491
+Context 0 running 16 trials with seed 900639
+Context 2 running 16 trials with seed 3302343
+Context 1 running 16 trials with seed 2201562
+Context 0 running 16 trials with seed 1000710
+Context 3 running 16 trials with seed 4603266
+Context 2 running 16 trials with seed 3402414
+Context 1 running 16 trials with seed 2301633
+Context 3 running 16 trials with seed 4703337
+Context 0 running 16 trials with seed 1100781
+Context 2 running 16 trials with seed 3502485
+DING DING DING DING
+
+Failures 0/768
+Best fitness 36.000000
+4 threads took 41.045000 seconds to generate self-avoiding walk statistics.
+Running test 'saw'
+Running test 'saw'
+Context 0 running 16 trials with seed 0
+Context 1 running 16 trials with seed 800568
+Context 2 running 16 trials with seed 1601136
+Context 3 running 16 trials with seed 2401704
+Context 4 running 16 trials with seed 3202272
+Context 5 running 16 trials with seed 4002840
+Context 3 running 16 trials with seed 2501775
+Context 1 running 16 trials with seed 900639
+Context 2 running 16 trials with seed 1701207
+Context 0 running 16 trials with seed 100071
+Context 5 running 16 trials with seed 4102911
+Context 4 running 16 trials with seed 3302343
+Context 2 running 16 trials with seed 1801278
+Context 3 running 16 trials with seed 2601846
+Context 1 running 16 trials with seed 1000710
+Context 5 running 16 trials with seed 4202982
+Context 4 running 16 trials with seed 3402414
+Context 0 running 16 trials with seed 200142
+Context 3 running 16 trials with seed 2701917
+Context 2 running 16 trials with seed 1901349
+Context 1 running 16 trials with seed 1100781
+Context 5 running 16 trials with seed 4303053
+Context 4 running 16 trials with seed 3502485
+Context 0 running 16 trials with seed 300213
+Context 2 running 16 trials with seed 2001420
+Context 1 running 16 trials with seed 1200852
+Context 5 running 16 trials with seed 4403124
+Context 3 running 16 trials with seed 2801988
+Context 0 running 16 trials with seed 400284
+Context 4 running 16 trials with seed 3602556
+Context 1 running 16 trials with seed 1300923
+Context 2 running 16 trials with seed 2101491
+Context 5 running 16 trials with seed 4503195
+Context 3 running 16 trials with seed 2902059
+Context 0 running 16 trials with seed 500355
+Context 4 running 16 trials with seed 3702627
+Context 0 running 16 trials with seed 600426
+Context 3 running 16 trials with seed 3002130
+Context 1 running 16 trials with seed 1400994
+Context 2 running 16 trials with seed 2201562
+Context 4 running 16 trials with seed 3802698
+Context 5 running 16 trials with seed 4603266
+Context 3 running 16 trials with seed 3102201
+Context 0 running 16 trials with seed 700497
+Context 1 running 16 trials with seed 1501065
+Context 4 running 16 trials with seed 3902769
+Context 2 running 16 trials with seed 2301633
+Context 5 running 16 trials with seed 4703337
+DING DING DING DING
+
+Failures 0/768
+Best fitness 36.000000
+6 threads took 31.086000 seconds to generate self-avoiding walk statistics.
+Running test 'saw'
+Running test 'saw'
+Context 0 running 16 trials with seed 0
+Context 1 running 16 trials with seed 600426
+Context 2 running 16 trials with seed 1200852
+Context 3 running 16 trials with seed 1801278
+Context 4 running 16 trials with seed 2401704
+Context 5 running 16 trials with seed 3002130
+Context 6 running 16 trials with seed 3602556
+Context 7 running 16 trials with seed 4202982
+Context 4 running 16 trials with seed 2501775
+Context 0 running 16 trials with seed 100071
+Context 3 running 16 trials with seed 1901349
+Context 7 running 16 trials with seed 4303053
+Context 6 running 16 trials with seed 3702627
+Context 1 running 16 trials with seed 700497
+Context 5 running 16 trials with seed 3102201
+Context 2 running 16 trials with seed 1300923
+Context 4 running 16 trials with seed 2601846
+Context 3 running 16 trials with seed 2001420
+Context 1 running 16 trials with seed 800568
+Context 7 running 16 trials with seed 4403124
+Context 0 running 16 trials with seed 200142
+Context 6 running 16 trials with seed 3802698
+Context 5 running 16 trials with seed 3202272
+Context 2 running 16 trials with seed 1400994
+Context 4 running 16 trials with seed 2701917
+Context 3 running 16 trials with seed 2101491
+Context 1 running 16 trials with seed 900639
+Context 7 running 16 trials with seed 4503195
+Context 0 running 16 trials with seed 300213
+Context 6 running 16 trials with seed 3902769
+Context 3 running 16 trials with seed 2201562
+Context 1 running 16 trials with seed 1000710
+Context 4 running 16 trials with seed 2801988
+Context 6 running 16 trials with seed 4002840
+Context 7 running 16 trials with seed 4603266
+Context 2 running 16 trials with seed 1501065
+Context 5 running 16 trials with seed 3302343
+Context 0 running 16 trials with seed 400284
+Context 3 running 16 trials with seed 2301633
+Context 1 running 16 trials with seed 1100781
+Context 2 running 16 trials with seed 1601136
+Context 4 running 16 trials with seed 2902059
+Context 7 running 16 trials with seed 4703337
+Context 0 running 16 trials with seed 500355
+Context 6 running 16 trials with seed 4102911
+Context 5 running 16 trials with seed 3402414
+Context 5 running 16 trials with seed 3502485
+Context 2 running 16 trials with seed 1701207
+DING DING DING DING
+
+Failures 0/768
+Best fitness 36.000000
+8 threads took 24.333000 seconds to generate self-avoiding walk statistics.
+Running test 'saw'
+Running test 'saw'
+Running test 'saw'
+Running test 'saw'
+Context 0 running 16 trials with seed 0
+Context 1 running 16 trials with seed 400284
+Context 3 running 16 trials with seed 1200852
+Context 7 running 16 trials with seed 2801988
+Context 4 running 16 trials with seed 1601136
+Context 2 running 16 trials with seed 800568
+Context 6 running 16 trials with seed 2401704
+Context 10 running 16 trials with seed 4002840
+Context 11 running 16 trials with seed 4403124
+Context 5 running 16 trials with seed 2001420
+Context 8 running 16 trials with seed 3202272
+Context 9 running 16 trials with seed 3602556
+Context 2 running 16 trials with seed 900639
+Context 11 running 16 trials with seed 4503195
+Context 6 running 16 trials with seed 2501775
+Context 0 running 16 trials with seed 100071
+Context 4 running 16 trials with seed 1701207
+Context 1 running 16 trials with seed 500355
+Context 5 running 16 trials with seed 2101491
+Context 3 running 16 trials with seed 1300923
+Context 9 running 16 trials with seed 3702627
+Context 8 running 16 trials with seed 3302343
+Context 10 running 16 trials with seed 4102911
+Context 7 running 16 trials with seed 2902059
+Context 0 running 16 trials with seed 200142
+Context 5 running 16 trials with seed 2201562
+Context 11 running 16 trials with seed 4603266
+Context 8 running 16 trials with seed 3402414
+Context 2 running 16 trials with seed 1000710
+Context 4 running 16 trials with seed 1801278
+Context 6 running 16 trials with seed 2601846
+Context 1 running 16 trials with seed 600426
+Context 9 running 16 trials with seed 3802698
+Context 3 running 16 trials with seed 1400994
+Context 10 running 16 trials with seed 4202982
+Context 7 running 16 trials with seed 3002130
+Context 5 running 16 trials with seed 2301633
+Context 0 running 16 trials with seed 300213
+Context 11 running 16 trials with seed 4703337
+Context 1 running 16 trials with seed 700497
+Context 10 running 16 trials with seed 4303053
+Context 8 running 16 trials with seed 3502485
+Context 6 running 16 trials with seed 2701917
+Context 7 running 16 trials with seed 3102201
+Context 9 running 16 trials with seed 3902769
+Context 2 running 16 trials with seed 1100781
+Context 3 running 16 trials with seed 1501065
+Context 4 running 16 trials with seed 1901349
+DING DING DING DING
+
+Failures 0/768
+Best fitness 36.000000
+12 threads took 17.336000 seconds to generate self-avoiding walk statistics.
+Running test 'saw'
+Running test 'saw'
+Running test 'saw'
+Running test 'saw'
+Context 0 running 16 trials with seed 0
+Context 1 running 16 trials with seed 300213
+Context 3 running 16 trials with seed 900639
+Context 2 running 16 trials with seed 600426
+Context 4 running 16 trials with seed 1200852
+Context 5 running 16 trials with seed 1501065
+Context 7 running 16 trials with seed 2101491
+Context 10 running 16 trials with seed 3002130
+Context 6 running 16 trials with seed 1801278
+Context 9 running 16 trials with seed 2701917
+Context 11 running 16 trials with seed 3302343
+Context 8 running 16 trials with seed 2401704
+Context 12 running 16 trials with seed 3602556
+Context 13 running 16 trials with seed 3902769
+Context 15 running 16 trials with seed 4503195
+Context 14 running 16 trials with seed 4202982
+Context 7 running 16 trials with seed 2201562
+Context 13 running 16 trials with seed 4002840
+Context 5 running 16 trials with seed 1601136
+Context 10 running 16 trials with seed 3102201
+Context 8 running 16 trials with seed 2501775
+Context 11 running 16 trials with seed 3402414
+Context 0 running 16 trials with seed 100071
+Context 1 running 16 trials with seed 400284
+Context 14 running 16 trials with seed 4303053
+Context 3 running 16 trials with seed 1000710
+Context 6 running 16 trials with seed 1901349
+Context 4 running 16 trials with seed 1300923
+Context 12 running 16 trials with seed 3702627
+Context 2 running 16 trials with seed 700497
+Context 15 running 16 trials with seed 4603266
+Context 9 running 16 trials with seed 2801988
+Context 1 running 16 trials with seed 500355
+Context 5 running 16 trials with seed 1701207
+Context 7 running 16 trials with seed 2301633
+Context 8 running 16 trials with seed 2601846
+Context 11 running 16 trials with seed 3502485
+Context 13 running 16 trials with seed 4102911
+Context 14 running 16 trials with seed 4403124
+Context 6 running 16 trials with seed 2001420
+Context 0 running 16 trials with seed 200142
+Context 3 running 16 trials with seed 1100781
+Context 2 running 16 trials with seed 800568
+Context 10 running 16 trials with seed 3202272
+Context 15 running 16 trials with seed 4703337
+Context 12 running 16 trials with seed 3802698
+Context 4 running 16 trials with seed 1400994
+Context 9 running 16 trials with seed 2902059
+DING DING DING DING
+
+Failures 0/768
+Best fitness 36.000000
+16 threads took 14.587000 seconds to generate self-avoiding walk statistics.

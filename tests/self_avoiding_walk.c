@@ -4,7 +4,7 @@
 /*#define THREADS 16*/
 
 static int THREADS = 0;
-#define TRIALS (16*1000)
+#define TRIALS 768
 #define MAX_ITERATIONS 1000
 #define POPULATION 1000
 
@@ -200,7 +200,7 @@ TEST(self_avoiding_walk)
     THREADS = atoi(argv[2]);
 
     evo_Config_SetUnitCount(config, THREADS);
-    evo_Config_SetRandomStreamCount(config, 16);
+    evo_Config_SetRandomStreamCount(config, 48);
     evo_Config_SetTrials(config, TRIALS);
     evo_Config_SetMaxIterations(config, MAX_ITERATIONS);
     evo_Config_SetPopulationSize(config, POPULATION);
